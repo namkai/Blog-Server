@@ -15,25 +15,20 @@ userSchema.pre('save', function (next) {
 	const user = this;
 
 	// Generate a salt then run callback
-	bcrypt.genSalt(10, (err, salt) => {
-		if (err) { return next(err); }
-
+	bcrypt.genSalt(10, (err, salt) =>
+		err ? next(err) :
 		// Hash (encrypt) our password using the salt
 		bcrypt.hash(user.password, salt, null, (err, hash) => {
-			if (err) { return next(err); }
-
+			err ? next(err) :
 			// Overwrite plain text password with encrypted password
 			user.password = hash;
 			next();
-		});
-	});
+		}));
 });
 
 userSchema.methods.comparePassword = function (candidatePassword, callback) {
-	bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-		if (err) { return callback(err);}
-		callback(null, isMatch);
-	});
+	bcrypt.compare(candidatePassword, this.password, (err, isMatch) =>
+		err ? callback(err) : callback(null, isMatch));
 };
 
 // Create the model class
