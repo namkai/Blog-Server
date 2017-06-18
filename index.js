@@ -6,7 +6,16 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
 const router = require('./router');
+const mongoose = require('mongoose');
 
+// DB Setup
+mongoose.connect("mongodb://localhost:auth/auth");
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log(`were connected~`)
+});
 //App Setup
 app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*' }));
