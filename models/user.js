@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt-nodejs');
 // Define our model
 
 const userSchema = new Schema({
+	username: String,
 	email: { type: String, unique: true, lowercase: true },
 	password: String,
 });
@@ -17,13 +18,13 @@ userSchema.pre('save', function (next) {
 	// Generate a salt then run callback
 	bcrypt.genSalt(10, (err, salt) =>
 		err ? next(err) :
-		// Hash (encrypt) our password using the salt
-		bcrypt.hash(user.password, salt, null, (err, hash) => {
-			err ? next(err) :
-			// Overwrite plain text password with encrypted password
-			user.password = hash;
-			next();
-		}));
+			// Hash (encrypt) our password using the salt
+			bcrypt.hash(user.password, salt, null, (err, hash) => {
+				err ? next(err) :
+					// Overwrite plain text password with encrypted password
+					user.password = hash;
+				next();
+			}));
 });
 
 userSchema.methods.comparePassword = function (candidatePassword, callback) {
