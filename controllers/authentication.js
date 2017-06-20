@@ -12,11 +12,9 @@ function tokenForUser(user) {
 exports.signin = (req, res) => res.send({ token: tokenForUser(req.user) });
 
 
-exports.signup = ({ body }, res, next) => {
-	const { email, password } = body;
-
-	if (!email || !password) {
-		return res.status(422).send({ error: 'You must provide email and password' });
+exports.signup = ({ body: { name, email, password } }, res, next) => {
+	if (!name || !email || !password) {
+		return res.status(422).send({ error: 'You must provide username, email and password' });
 	}
 
 	// See if a user with the given email exists
@@ -30,6 +28,7 @@ exports.signup = ({ body }, res, next) => {
 		}
 		// If a user with email does NOT exist, create and save user record
 		const user = new User({
+			name,
 			email,
 			password,
 		});

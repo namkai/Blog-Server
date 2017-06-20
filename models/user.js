@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt-nodejs');
 // Define our model
 
 const userSchema = new Schema({
-	username: String,
+	name: String,
 	email: { type: String, unique: true, lowercase: true },
 	password: String,
 });
@@ -14,7 +14,6 @@ const userSchema = new Schema({
 userSchema.pre('save', function (next) {
 	// Get access to the user model
 	const user = this;
-
 	// Generate a salt then run callback
 	bcrypt.genSalt(10, (err, salt) =>
 		err ? next(err) :

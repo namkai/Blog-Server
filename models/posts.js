@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 
 const PostSchema = new mongoose.Schema({
-	name: String,
+	title: String,
 	image: String,
 	description: String,
-	project: String,
+	body: String,
 	author: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +17,7 @@ const PostSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'comment',
 	}],
+	date: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('post', PostSchema);
