@@ -1,26 +1,17 @@
 const express = require('express');
-const posts = express.Router();
+const posts = express.Router({mergeParams: true});
 const passport = require('passport');
 const User = require('../models/user');
 const Post = require('../models/posts');
+const comments = require('../controllers/comments');
+
+
+posts.use('/:id/comments', comments )
 
 posts.get('/', (req, res) => Post.find({}, (err, posts) => err ? console.log(err) : res.json(posts)));
 
-posts.post('/', ({ user: { _id, name }, body: { title, image, body, description } }, res) => {
-
-	const author = {
-		id: _id,
-		name,
-	};
-	const newPost = {
-		title,
-		image,
-		body,
-		description,
-		author,
-	};
-	Post.create(newPost, (err, newlyCreated) => err ? console.log(err) : res.json({ newlyCreated }));
-});
+posts.post('/', ({ body }, res) =>
+	Post.create(body, (err, newlyCreated) => err ? console.log(err) : res.json({ newlyCreated })));
 
 posts.get('/:id', (req, res) =>
 	Post.findById(req.params.id).populate('comments').exec((err, post) =>
