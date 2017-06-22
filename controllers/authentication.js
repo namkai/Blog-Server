@@ -12,7 +12,7 @@ function tokenForUser(user) {
 exports.signin = (req, res) => res.send({ token: tokenForUser(req.user) });
 
 
-exports.signup = ({ body: { name, email, password } }, res, next) => {
+exports.signup = ({ body: { name, email, password, profilePhoto, backgroundPhoto } }, res, next) => {
 	if (!name || !email || !password) {
 		return res.status(422).send({ error: 'You must provide username, email and password' });
 	}
@@ -31,6 +31,8 @@ exports.signup = ({ body: { name, email, password } }, res, next) => {
 			name,
 			email,
 			password,
+			profilePhoto,
+			backgroundPhoto,
 		});
 
 		user.save(err => err ? next(err) : res.json({ token: tokenForUser(user) }));

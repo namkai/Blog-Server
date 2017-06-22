@@ -8,6 +8,8 @@ const userSchema = new Schema({
 	name: String,
 	email: { type: String, unique: true, lowercase: true },
 	password: String,
+	profilePhoto: String,
+	backgroundPhoto: String,
 });
 
 // On Save Hook, encrypt password
